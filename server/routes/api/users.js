@@ -6,6 +6,9 @@ const jwt = require("jsonwebtoken");
 const keys = require("../../config/keys");
 const passport = require("passport"); 
 
+// Load Input Validation
+const validateRegisterInput = require("../../validation/register");
+const validateLoginInput = require("../../validation/login");
 
 // test api
 router.get("/test", (req, res) =>
@@ -33,7 +36,7 @@ router.post("/register", (req, res) => {
         bcrypt.genSalt(10, (err, salt) => {
           bcrypt.hash(newuser.password, salt, (err, hash) => {
             if (err) throw err;
-            newuser.local.password = hash;
+            newuser.password = hash;
             newuser
               .save()
               .then((user) => {
@@ -86,4 +89,21 @@ router.post("/register", (req, res) => {
         });
     });
   });
+
   
+// @route   GET api/users/current
+// @desc    Return current user
+// @access  Private
+router.get(
+    "/current",
+    passport.authenticate("jwt", { session: false }),
+    (req, res) => {
+      res.json({
+        id: req.user.id,
+        name: req.user.name,
+        email: req.user.email,
+      });
+    }
+  );
+  
+  module.exports = router;

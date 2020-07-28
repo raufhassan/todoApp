@@ -9,10 +9,7 @@ const UserSchema= new Schema({
       type: {
         type: String,
         required: true
-      },
-      marked: {
-        type: Boolean,
-        required: true
       }
+    
 })
-module.exports = User = mongoose.model("User", UserSchema);  
+module.exports = Items = mongoose.model("Items", UserSchema);  
